@@ -24,14 +24,13 @@ function Grid() {
       startingTime: "01:25",
       endingTime: "09:25",
     },
-    
+
     {
       name: "THI",
       isActiveOn: "Thursday",
       startingTime: "05:25",
       endingTime: "19:25",
     },
-    
   ];
   function calculateTime(startingTime, endingTime) {
     const endingTimeParts = endingTime.split(":");
@@ -46,6 +45,17 @@ function Grid() {
       endingHours * 60 + endingMinutes - (startingHours * 60 + startingMinutes);
     return timeLength;
   }
+
+  function calculateBaseline(blocks){
+    if (!blocks || blocks.length === 0) {
+      return null; 
+    }
+    blocks.sort((a, b) => {
+      return new Date("1970/01/01 " + a.startingTime) - new Date("1970/01/01 " + b.startingTime);
+    });
+    return blocks[0].startingTime;
+  }
+  const baseline = calculateBaseline(timeBlocks)
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
   return (
@@ -71,9 +81,16 @@ function Grid() {
                           timeBlock.startingTime,
                           timeBlock.endingTime
                         )}px`,
+                        marginTop:`${calculateTime(
+                          baseline,
+                          timeBlock.startingTime
+                        )}px`
                       }}
+                      className="absolute mx-2 rounded-lg"
                     >
-                      true
+                      <div>
+                      {timeBlock.startingTime}
+                      </div>
                     </div>
                   ) : (
                     <></>
