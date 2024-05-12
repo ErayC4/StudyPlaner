@@ -15,23 +15,28 @@ function Grid() {
     {
       name: "THI",
       isActiveOn: "Wednesday",
-      startingTime: "08:25",
-      endingTime: "09:25",
+      startingTime: "08:13",
+      endingTime: "09:45",
+      color:"#A2505B",
     },
     {
       name: "THI",
       isActiveOn: "Monday",
-      startingTime: "01:25",
-      endingTime: "09:25",
+      startingTime: "01:22",
+      endingTime: "09:59",
+      color: "#CD96A9",
     },
 
     {
       name: "THI",
       isActiveOn: "Thursday",
-      startingTime: "05:25",
-      endingTime: "19:25",
+      startingTime: "05:32",
+      endingTime: "19:21",
+      color: "#8EBCA8",
     },
   ];
+
+  
   function calculateTime(startingTime, endingTime) {
     const endingTimeParts = endingTime.split(":");
     const startingTimeParts = startingTime.split(":");
@@ -46,18 +51,30 @@ function Grid() {
     return timeLength;
   }
 
-  function calculateBaseline(blocks){
+  function calculateBaseline(blocks) {
     if (!blocks || blocks.length === 0) {
-      return null; 
+      return null;
     }
+    // Funktion, um die Minuten auf 00 zu setzen
+    function roundDownToHour(timeString) {
+      const [hours] = timeString.split(":");
+      return hours + ":00";
+    }
+    // Die Zeitblöcke sortieren
     blocks.sort((a, b) => {
-      return new Date("1970/01/01 " + a.startingTime) - new Date("1970/01/01 " + b.startingTime);
+      const timeA = roundDownToHour(a.startingTime);
+      const timeB = roundDownToHour(b.startingTime);
+      return new Date("1970/01/01 " + timeA) - new Date("1970/01/01 " + timeB);
     });
-    return blocks[0].startingTime;
+    // Den kleinsten Wert zurückgeben
+    return roundDownToHour(blocks[0].startingTime);
   }
-  const baseline = calculateBaseline(timeBlocks)
+  const baseline = calculateBaseline(timeBlocks);
+
+  
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
+
   return (
     <div className="px-16">
       <div className="grid grid-cols-7"></div>
@@ -76,21 +93,19 @@ function Grid() {
                   {day.name == timeBlock.isActiveOn ? (
                     <div
                       style={{
-                        backgroundColor: "#34D399",
+                        backgroundColor: timeBlock.color,
                         height: `${calculateTime(
                           timeBlock.startingTime,
                           timeBlock.endingTime
                         )}px`,
-                        marginTop:`${calculateTime(
+                        marginTop: `${calculateTime(
                           baseline,
                           timeBlock.startingTime
-                        )}px`
+                        )}px`,
                       }}
-                      className="absolute mx-2 rounded-lg"
+                      className="absolute mx-2 rounded-lg w-48"
                     >
-                      <div>
-                      {timeBlock.startingTime}
-                      </div>
+                      <div>{timeBlock.startingTime}</div>
                     </div>
                   ) : (
                     <></>
