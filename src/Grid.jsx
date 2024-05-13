@@ -1,40 +1,16 @@
 import React from "react";
 
-function Grid() {
+function Grid({blocks}) {
   const daysOfWeek = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    { name: "Saturday" },
-    { name: "Sunday" },
+    { name: "monday" },
+    { name: "tuesday" },
+    { name: "wednesday" },
+    { name: "thursday" },
+    { name: "friday" },
+    { name: "saturday" },
+    { name: "sunday" },
   ];
 
-  const timeBlocks = [
-    {
-      name: "THI",
-      isActiveOn: "Wednesday",
-      startingTime: "08:13",
-      endingTime: "09:45",
-      color:"#A2505B",
-    },
-    {
-      name: "THI",
-      isActiveOn: "Monday",
-      startingTime: "01:22",
-      endingTime: "09:59",
-      color: "#CD96A9",
-    },
-
-    {
-      name: "THI",
-      isActiveOn: "Thursday",
-      startingTime: "05:32",
-      endingTime: "19:21",
-      color: "#8EBCA8",
-    },
-  ];
 
   
   function calculateTime(startingTime, endingTime) {
@@ -69,14 +45,30 @@ function Grid() {
     // Den kleinsten Wert zurückgeben
     return roundDownToHour(blocks[0].startingTime);
   }
-  const baseline = calculateBaseline(timeBlocks);
+  const baseline = calculateBaseline(blocks);
 
-  
+
+    // Erstelle ein neues Date-Objekt
+    var heute = new Date();
+    // Extrahiere den Tag aus dem Date-Objekt
+    var tag = heute.getDate();
+
+    // Extrahiere den Monat aus dem Date-Objekt (beachte: Januar ist 0 und Dezember ist 11)
+    var monat = heute.getMonth() + 1; // Füge 1 hinzu, da die Monate bei 0 beginnen
+
+    // Extrahiere das Jahr aus dem Date-Objekt
+    var jahr = heute.getFullYear();
+
+    var wochentagIndex = heute.getDay();
+    // Ein Array mit den Wochentagen als Strings
+    var wochentage = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+    
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
 
   return (
-    <div className="px-16">
+    <div className="">
       <div className="grid grid-cols-7"></div>
       <div className="grid grid-cols-7">
         {daysOfWeek.map((day, dayIndex) => (
@@ -88,7 +80,7 @@ function Grid() {
               {day.name}
             </p>
             <div className="absolute z-10">
-              {timeBlocks.map((timeBlock, index) => (
+              {blocks.map((timeBlock, index) => (
                 <div key={index}>
                   {day.name == timeBlock.isActiveOn ? (
                     <div
@@ -123,7 +115,8 @@ function Grid() {
                       ? "bg-transparent"
                       : "bg-gray-300 border-b border-gray-600"
                   }`}
-                ></div>
+                  style={day.name === wochentage[wochentagIndex] ? { filter: "brightness(80%)" } : {}}
+                  ></div>
               ))}
             </div>
           </div>
