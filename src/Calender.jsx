@@ -65,7 +65,13 @@ function Calender({ blocks }) {
 
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
-
+  const dateInCalender = (dayIndex) => {
+    return new Date(
+      datum.getFullYear(),
+      datum.getMonth(),
+      datum.getDate() + dayIndex - 1
+    ).toLocaleDateString();
+  };
   return (
     <div>
       {}
@@ -76,21 +82,19 @@ function Calender({ blocks }) {
       <div className="grid grid-cols-7">
         {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
-            <p
+            <div
               className="border-b border-r p-2 text-xl border-gray-600"
               key={dayIndex}
             >
               {day}
-              <p>
-                
-                {new Date(datum.getFullYear(), datum.getMonth(), datum.getDate() + dayIndex - 1).toLocaleDateString()}
-              </p>
-              <p></p>
-            </p>
+              <div>
+                {dateInCalender(dayIndex)}
+              </div>
+            </div>
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  {day == timeBlock.isActiveOn ? (
+                  {dateInCalender(dayIndex) == timeBlock.date ? (
                     <div
                       style={{
                         backgroundColor: timeBlock.color,
@@ -106,6 +110,7 @@ function Calender({ blocks }) {
                       className="absolute mx-2 rounded-lg w-48"
                     >
                       <div>{timeBlock.startingTime}</div>
+                      <div>{timeBlock.date}</div>
                     </div>
                   ) : (
                     <></>

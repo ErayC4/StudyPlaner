@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calender from "./Calender.jsx";
 
 function AddTimeBlock() {
@@ -11,6 +11,7 @@ function AddTimeBlock() {
   const [endingTime, setEndingTime] = useState("");
   const [timeBlocks, setTimeBlocks] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
+  const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
   const handleStartTimeChange = (event) => {
     setStartingTime(event.target.value);
@@ -26,16 +27,65 @@ function AddTimeBlock() {
       startingTime: startingTime.toString(),
       endingTime: endingTime.toString(),
       isActiveOn: selectedDay,
+      date : datum.toLocaleDateString('de-DE'), //das ändern wenn man anderes zeit format will
     };
     setTimeBlocks([...timeBlocks, newTimeBlock]);
     setStartingTime("");
     setEndingTime("");
     setSelectedDay("");
+    setDatum(new Date());
   };
 
-  const getDate = () => {
 
-  }
+
+  // Funktion zum Berechnen des Datums basierend auf dem ausgewählten Tag
+  const calculateDateBasedOnSelectedDay = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 für Sonntag, 1 für Montag usw.
+    let selectedDayIndex;
+
+    switch (selectedDay.toLowerCase()) {
+      case "monday":
+        selectedDayIndex = 1;
+        break;
+      case "tuesday":
+        selectedDayIndex = 2;
+        break;
+      case "wednesday":
+        selectedDayIndex = 3;
+        break;
+      case "thursday":
+        selectedDayIndex = 4;
+        break;
+      case "friday":
+        selectedDayIndex = 5;
+        break;
+      case "saturday":
+        selectedDayIndex = 6;
+        break;
+      case "sunday":
+        selectedDayIndex = 0;
+        break;
+      default:
+        return;
+    }
+
+    if (dayOfWeek > selectedDayIndex) {
+      // Der ausgewählte Tag ist in der nächsten Woche
+      today.setDate(today.getDate() + 7 - dayOfWeek + selectedDayIndex);
+    } else {
+      // Der ausgewählte Tag ist in dieser Woche
+      today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
+    }
+
+    setDatum(today);
+  };
+
+  useEffect(() => {
+    calculateDateBasedOnSelectedDay();
+  }, [selectedDay]);
+
+
 
   return (
     <div className="px-16">
