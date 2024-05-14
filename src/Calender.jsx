@@ -1,17 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 
-function Grid({blocks}) {
-  const daysOfWeek = [
-    { name: "monday" },
-    { name: "tuesday" },
-    { name: "wednesday" },
-    { name: "thursday" },
-    { name: "friday" },
-    { name: "saturday" },
-    { name: "sunday" },
-  ];
-
-
+function Calender({ blocks }) {
   
   function calculateTime(startingTime, endingTime) {
     const endingTimeParts = endingTime.split(":");
@@ -47,42 +36,61 @@ function Grid({blocks}) {
   }
   const baseline = calculateBaseline(blocks);
 
+  // Erstelle ein neues Date-Objekt
+  const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
-    // Erstelle ein neues Date-Objekt
-    var heute = new Date();
-    // Extrahiere den Tag aus dem Date-Objekt
-    var tag = heute.getDate();
+  const handleBack = () => {
+    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
+    neuesDatum.setDate(neuesDatum.getDate() - 7); // 7 Tage zurückgehen
+    setDatum(neuesDatum); // Datum aktualisieren
+  };
 
-    // Extrahiere den Monat aus dem Date-Objekt (beachte: Januar ist 0 und Dezember ist 11)
-    var monat = heute.getMonth() + 1; // Füge 1 hinzu, da die Monate bei 0 beginnen
+  const handleForth = () => {
+    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
+    neuesDatum.setDate(neuesDatum.getDate() + 7); // 7 Tage vorwärts gehen
+    setDatum(neuesDatum); // Datum aktualisieren
+  };
+  var heute = new Date();
+  var wochentagIndex = heute.getDay();
+  // Ein Array mit den Wochentagen als Strings
+  var wochentage = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
-    // Extrahiere das Jahr aus dem Date-Objekt
-    var jahr = heute.getFullYear();
-
-    var wochentagIndex = heute.getDay();
-    // Ein Array mit den Wochentagen als Strings
-    var wochentage = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-    
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
 
   return (
-    <div className="">
+    <div>
+      {}
+      <button className="bg-yellow-400 py-2 px-8 rounded-full" onClick={handleBack}>back</button>
+      <button className="ml-2 mt-4 bg-yellow-400 py-2 px-8 rounded-full" onClick={handleForth}>forth</button>
+
       <div className="grid grid-cols-7"></div>
       <div className="grid grid-cols-7">
-        {daysOfWeek.map((day, dayIndex) => (
+        {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
             <p
               className="border-b border-r p-2 text-xl border-gray-600"
               key={dayIndex}
             >
-              {day.name}
+              {day}
+              <p>
+                
+                {new Date(datum.getFullYear(), datum.getMonth(), datum.getDate() + dayIndex - 1).toLocaleDateString()}
+              </p>
+              <p></p>
             </p>
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  {day.name == timeBlock.isActiveOn ? (
+                  {day == timeBlock.isActiveOn ? (
                     <div
                       style={{
                         backgroundColor: timeBlock.color,
@@ -115,8 +123,12 @@ function Grid({blocks}) {
                       ? "bg-transparent"
                       : "bg-gray-300 border-b border-gray-600"
                   }`}
-                  style={day.name === wochentage[wochentagIndex] ? { filter: "brightness(80%)" } : {}}
-                  ></div>
+                  style={
+                    day === wochentage[wochentagIndex - 1]
+                      ? { filter: "brightness(80%)" }
+                      : {}
+                  }
+                ></div>
               ))}
             </div>
           </div>
@@ -126,4 +138,4 @@ function Grid({blocks}) {
   );
 }
 
-export default Grid;
+export default Calender;

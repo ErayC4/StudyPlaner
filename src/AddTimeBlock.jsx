@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Grid from "./Grid.jsx";
+import Calender from "./Calender.jsx";
 
 function AddTimeBlock() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -33,6 +33,10 @@ function AddTimeBlock() {
     setSelectedDay("");
   };
 
+  const getDate = () => {
+
+  }
+
   return (
     <div className="px-16">
       <button
@@ -41,7 +45,7 @@ function AddTimeBlock() {
       >
         Add a Timeblock
       </button>
-      <Grid blocks={timeBlocks} />
+      <Calender blocks={timeBlocks} />
       
       {isOpen ? (
         <div className="w-[50%] p-8 bg-white border-gray-600 border-2 rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
