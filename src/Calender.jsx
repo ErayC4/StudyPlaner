@@ -65,13 +65,15 @@ function Calender({ blocks }) {
 
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
+
   const dateInCalender = (dayIndex) => {
     return new Date(
       datum.getFullYear(),
       datum.getMonth(),
-      datum.getDate() + dayIndex - 1
+      datum.getDate() + (dayIndex + 1) - datum.getDay()   //getDay gibt index vom heutigen tag, getDate 1-31...
     ).toLocaleDateString();
   };
+  
   return (
     <div>
       {}

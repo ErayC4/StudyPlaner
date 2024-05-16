@@ -137,7 +137,7 @@ function AddTimeBlock() {
               </div>
             </div>
             <div className="flex">
-              <p className="pr-2">Active on:</p>
+              <p className="pr-2">Active on every:</p>
               <select id="wochentag" name="wochentag" value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
               <option>please select</option>
 
@@ -150,7 +150,12 @@ function AddTimeBlock() {
                 <option value="sunday">Sunday</option>
               </select>
             </div>
+            <p className="pt-8">Or</p>
+            <div className="flex">
+              <input type="date" name="" id="" />
 
+              <p>On Certain Date</p>
+            </div>
             <p className="text-red-500 mt-8">
               This time is already occupied by HelloWorld (11:15-14:20)!
             </p>
@@ -162,21 +167,7 @@ function AddTimeBlock() {
               Show Timeplan
             </button>
 
-            <div className="flex mt-8">
-              <input type="checkbox" />
-
-              <label>Only Once</label>
-            </div>
-            <div className="flex">
-              <input type="checkbox" />
-
-              <label>Weekly Repeat</label>
-            </div>
-            <div className="flex">
-              <input type="date" name="" id="" />
-
-              <p>On Certain Date</p>
-            </div>
+            
             <div className="flex mt-8">
               <label>Select Colors</label>
               <button>
