@@ -73,6 +73,7 @@ function Calender({ blocks }) {
       datum.getDate() + (dayIndex + 1) - datum.getDay()   //getDay gibt index vom heutigen tag, getDate 1-31...
     ).toLocaleDateString();
   };
+
   
   return (
     <div>
@@ -96,7 +97,12 @@ function Calender({ blocks }) {
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  {dateInCalender(dayIndex) == timeBlock.date ? (
+                  <p>
+                  {dateInCalender(dayIndex)}
+                  </p>
+                  {timeBlock.startingDate}
+                  {/*Hier Weiter machen, das wenn timeblock kleiner ist als calender, nicht anzeigen*/}
+                  {dateInCalender(dayIndex) < timeBlock.startingDate ? (
                     <div
                       style={{
                         backgroundColor: timeBlock.color,

@@ -13,30 +13,43 @@ function AddTimeBlock() {
   const [selectedDay, setSelectedDay] = useState("");
   const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
-  const handleStartTimeChange = (event) => {
-    setStartingTime(event.target.value);
+const handleStartTimeChange = (event) => {
+  setStartingTime(event.target.value);
+};
+
+const handleEndTimeChange = (event) => {
+  setEndingTime(event.target.value);
+};
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+  const dayOfWeek = datum.getDay();
+  const wochentage = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+  const newTimeBlock = {
+    startingTime: startingTime.toString(),
+    endingTime: endingTime.toString(),
+    startingDate : datum.toLocaleDateString('de-DE'),
+    repetitionDay: wochentage[dayOfWeek - 1],
+    weeklyRepetionValue: 2,
+    weekyRepeat: true,
+    dailyRepeat: false,
+    activeOnCertainDay: false,
   };
-
-  const handleEndTimeChange = (event) => {
-    setEndingTime(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newTimeBlock = {
-      startingTime: startingTime.toString(),
-      endingTime: endingTime.toString(),
-      isActiveOn: selectedDay,
-      date : datum.toLocaleDateString('de-DE'), //das ändern wenn man anderes zeit format will
-    };
-    setTimeBlocks([...timeBlocks, newTimeBlock]);
-    setStartingTime("");
-    setEndingTime("");
-    setSelectedDay("");
-    setDatum(new Date());
-  };
-
-
+  setTimeBlocks([...timeBlocks, newTimeBlock]);
+  setStartingTime("");
+  setEndingTime("");
+  setSelectedDay("");
+  setDatum(new Date());
+};
+  
 
   // Funktion zum Berechnen des Datums basierend auf dem ausgewählten Tag
   const calculateDateBasedOnSelectedDay = () => {
@@ -137,6 +150,7 @@ function AddTimeBlock() {
               </div>
             </div>
             <div className="flex">
+              <p>Everyday?</p>
               <p className="pr-2">Active on every:</p>
               <select id="wochentag" name="wochentag" value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
               <option>please select</option>
