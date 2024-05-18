@@ -21,6 +21,14 @@ const handleEndTimeChange = (event) => {
   setEndingTime(event.target.value);
 };
 
+// Funktion zur manuellen Formatierung des Datums
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${day}.${month}.${year}`;
+};
+
 const handleSubmit = (event) => {
   event.preventDefault();
   const dayOfWeek = datum.getDay();
@@ -36,7 +44,7 @@ const handleSubmit = (event) => {
   const newTimeBlock = {
     startingTime: startingTime.toString(),
     endingTime: endingTime.toString(),
-    startingDate : datum.toLocaleDateString('de-DE'),
+    startingDate: formatDate(datum), // Formatieren des Datums
     repetitionDay: wochentage[dayOfWeek - 1],
     weeklyRepetionValue: 2,
     weekyRepeat: true,
@@ -49,6 +57,7 @@ const handleSubmit = (event) => {
   setSelectedDay("");
   setDatum(new Date());
 };
+
   
 
   // Funktion zum Berechnen des Datums basierend auf dem ausgewählten Tag
@@ -83,13 +92,9 @@ const handleSubmit = (event) => {
         return;
     }
 
-    if (dayOfWeek > selectedDayIndex) {
-      // Der ausgewählte Tag ist in der nächsten Woche
-      today.setDate(today.getDate() + 7 - dayOfWeek + selectedDayIndex);
-    } else {
-      // Der ausgewählte Tag ist in dieser Woche
-      today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
-    }
+    
+    today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
+    
 
     setDatum(today);
   };

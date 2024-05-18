@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 function Calender({ blocks }) {
-  
   function calculateTime(startingTime, endingTime) {
     const endingTimeParts = endingTime.split(":");
     const startingTimeParts = startingTime.split(":");
@@ -39,17 +38,6 @@ function Calender({ blocks }) {
   // Erstelle ein neues Date-Objekt
   const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
-  const handleBack = () => {
-    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
-    neuesDatum.setDate(neuesDatum.getDate() - 7); // 7 Tage zurückgehen
-    setDatum(neuesDatum); // Datum aktualisieren
-  };
-
-  const handleForth = () => {
-    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
-    neuesDatum.setDate(neuesDatum.getDate() + 7); // 7 Tage vorwärts gehen
-    setDatum(neuesDatum); // Datum aktualisieren
-  };
   var heute = new Date();
   var wochentagIndex = heute.getDay();
   // Ein Array mit den Wochentagen als Strings
@@ -63,23 +51,81 @@ function Calender({ blocks }) {
     "sunday",
   ];
 
-
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
 
-  const dateInCalender = (dayIndex) => {
-    return new Date(
-      datum.getFullYear(),
-      datum.getMonth(),
-      datum.getDate() + (dayIndex + 1) - datum.getDay()   //getDay gibt index vom heutigen tag, getDate 1-31...
-    ).toLocaleDateString();
+  const handleBack = () => {
+    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
+    neuesDatum.setDate(neuesDatum.getDate() - 7); // 7 Tage zurückgehen
+    setDatum(neuesDatum); // Datum aktualisieren
   };
 
-  
+  const handleForth = () => {
+    const neuesDatum = new Date(datum); // Kopie des aktuellen Datums erstellen
+    neuesDatum.setDate(neuesDatum.getDate() + 7); // 7 Tage vorwärts gehen
+    setDatum(neuesDatum); // Datum aktualisieren
+  };
+
+  const dateInCalender = (dayIndex) => {
+    const targetDate = new Date(
+      datum.getFullYear(),
+      datum.getMonth(),
+      datum.getDate() + (dayIndex + 1) - datum.getDay()
+    );
+
+    // Manuelle Formatierung des Datums
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, "0"); // Monate sind 0-basiert, also +1
+    const day = String(targetDate.getDate()).padStart(2, "0");
+
+    return `${day}.${month}.${year}`;
+  };
+
+  function getBiggerDate(date1, date2) {
+    const date1Array = date1.split(".");
+    const date2Array = date2.split(".");
+
+    const dayOfDate1 = parseInt(date1Array[0]);
+    const monthOfDate1 = parseInt(date1Array[1]);
+    const yearOfDate1 = parseInt(date1Array[2]);
+
+    const dayOfDate2 = parseInt(date2Array[0]);
+    const monthOfDate2 = parseInt(date2Array[1]);
+    const yearOfDate2 = parseInt(date2Array[2]);
+
+    if (yearOfDate1 > yearOfDate2) {
+      return true;
+    } else if (yearOfDate1 < yearOfDate2) {
+      return false;
+    } else {
+      // Jahre sind gleich, Monate vergleichen
+      if (monthOfDate1 > monthOfDate2) {
+        return true;
+      } else if (monthOfDate1 < monthOfDate2) {
+        return false;
+      } else {
+        // Monate sind gleich, Tage vergleichen
+        if (dayOfDate1 > dayOfDate2) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+  }
   return (
     <div>
-      {}
-      <button className="bg-yellow-400 py-2 px-8 rounded-full" onClick={handleBack}>back</button>
-      <button className="ml-2 mt-4 bg-yellow-400 py-2 px-8 rounded-full" onClick={handleForth}>forth</button>
+      <button
+        className="bg-yellow-400 py-2 px-8 rounded-full"
+        onClick={handleBack}
+      >
+        back
+      </button>
+      <button
+        className="ml-2 mt-4 bg-yellow-400 py-2 px-8 rounded-full"
+        onClick={handleForth}
+      >
+        forth
+      </button>
 
       <div className="grid grid-cols-7"></div>
       <div className="grid grid-cols-7">
@@ -90,19 +136,24 @@ function Calender({ blocks }) {
               key={dayIndex}
             >
               {day}
-              <div>
-                {dateInCalender(dayIndex)}
-              </div>
+              <div>{dateInCalender(dayIndex)}</div>
             </div>
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  <p>
-                  {dateInCalender(dayIndex)}
-                  </p>
-                  {timeBlock.startingDate}
-                  {/*Hier Weiter machen, das wenn timeblock kleiner ist als calender, nicht anzeigen*/}
-                  {dateInCalender(dayIndex) < timeBlock.startingDate ? (
+                  <p>Date1: {timeBlock.startingDate}</p>
+                  <p>Date2: {dateInCalender(dayIndex)}</p>
+                  {getBiggerDate(
+                    timeBlock.startingDate,
+                    dateInCalender(dayIndex)
+                  )}
+                  {/*<p>{getDatepartsFromDate(dateInCalender(dayIndex))}</p> */}
+
+                  {/*<p>{getDatepartsFromDate(timeBlock.startingDate)}</p>*/}
+                  {getBiggerDate(
+                    dateInCalender(dayIndex),
+                    timeBlock.startingDate
+                  ) && day == timeBlock.repetitionDay ? (
                     <div
                       style={{
                         backgroundColor: timeBlock.color,
