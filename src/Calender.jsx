@@ -42,23 +42,15 @@ function Calender({ blocks }) {
   var wochentagIndex = heute.getDay();
   // Wochentage im kalender
   var wochentage = [
+    "sunday",
     "monday",
     "tuesday",
     "wednesday",
     "thursday",
     "friday",
     "saturday",
-    "sunday",
   ];
   //wochentage zum vergleichen? hab noch nix besseres gefunden
-  var wochentage1 = [
-    "sunday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
 
@@ -78,7 +70,7 @@ function Calender({ blocks }) {
     const targetDate = new Date(
       datum.getFullYear(),
       datum.getMonth(),
-      datum.getDate() + (dayIndex + 1) - datum.getDay()
+      datum.getDate() + (dayIndex) - datum.getDay()
     );
 
     // Manuelle Formatierung des Datums
@@ -88,6 +80,14 @@ function Calender({ blocks }) {
 
     return `${day}.${month}.${year}`;
   };
+
+  const getToday = () => {
+    const today = new Date()
+    const day = String(today.getDate()).padStart(2,"0");
+    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const year = today.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
 
   function getBiggerDate(date1, date2) {
     const date1Array = date1.split(".");
@@ -121,10 +121,12 @@ function Calender({ blocks }) {
       }
     }
   }
-
+  
+  
   
   return (
     <div>
+      
       <button
         className="bg-yellow-400 py-2 px-8 rounded-full"
         onClick={handleBack}
@@ -137,12 +139,10 @@ function Calender({ blocks }) {
       >
         forth
       </button>
-
       <div className="grid grid-cols-7"></div>
       <div className="grid grid-cols-7">
         {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
-            {day}
             <div
               className="border-b border-r p-2 text-xl border-gray-600"
               key={dayIndex}
@@ -153,16 +153,12 @@ function Calender({ blocks }) {
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  <p>{wochentage[wochentagIndex - 1]}</p>
-                  {getBiggerDate(
-                    timeBlock.startingDate,
-                    dateInCalender(dayIndex)
-                  )}
+                  
                   
                   {getBiggerDate(
                     dateInCalender(dayIndex),
                     timeBlock.startingDate
-                  ) && day == timeBlock.repetitionDay ? (
+                  ) && (day == timeBlock.repetitionDay || timeBlock.dailyRepeat) ? (
                     <div
                       style={{
                         backgroundColor: "#ff9900",
@@ -197,11 +193,12 @@ function Calender({ blocks }) {
                       : "bg-gray-300 border-b border-gray-600"
                   }`}
                   style={
-                    day === wochentage1[wochentagIndex]
+                    dateInCalender(dayIndex) === getToday()
                       ? { filter: "brightness(80%)" }
                       : {}
                   }
-                ></div>
+                >
+                </div>
               ))}
             </div>
           </div>

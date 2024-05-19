@@ -11,7 +11,13 @@ function AddTimeBlock() {
   const [endingTime, setEndingTime] = useState("");
   const [timeBlocks, setTimeBlocks] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-  const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
+  const [datum, setDatum] = useState(new Date());
+  const [dailyRepeat, setDailyRepeat] = useState(false);
+
+  //const [repetitionValue, setRepetitionValue] = useState("0");
+  const handleCheckboxChange = () => {
+    setDailyRepeat(!dailyRepeat);
+  };
 
   const handleStartTimeChange = (event) => {
     setStartingTime(event.target.value);
@@ -46,15 +52,16 @@ function AddTimeBlock() {
       endingTime: endingTime.toString(),
       startingDate: formatDate(datum), // Formatieren des Datums
       repetitionDay: wochentage[dayOfWeek - 1],
-      weeklyRepetionValue: 2,
-      weekyRepeat: true,
-      dailyRepeat: false,
-      activeOnCertainDay: false,
+      //weeklyRepetitionValue: repetitionValue,
+      //weekyRepeat: true,
+      dailyRepeat: dailyRepeat,
+      activeOnCertainDay: "09.06.2024",
     };
     setTimeBlocks([...timeBlocks, newTimeBlock]);
     setStartingTime("");
     setEndingTime("");
     setSelectedDay("");
+    setRepetitionValue("0");
     setDatum(new Date());
   };
 
@@ -149,50 +156,62 @@ function AddTimeBlock() {
               </div>
             </div>
             <p className="text-red-500"></p>
+
+            <div className="flex">
+              <div>
+                <label className="pr-2">Every </label>
+                <select
+                  id="wochentag"
+                  name="wochentag"
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(e.target.value)}
+                >
+                  <option>please select</option>
+
+                  <option value="monday">Monday</option>
+                  <option value="tuesday">Tuesday</option>
+                  <option value="wednesday">Wednesday</option>
+                  <option value="thursday">Thursday</option>
+                  <option value="friday">Friday</option>
+                  <option value="saturday">Saturday</option>
+                  <option value="sunday">Sunday</option>
+                </select>
+              </div>
+              {/*
+            <div>
+              <select
+                id="repetition"
+                value={repetitionValue}
+                onChange={(e) => setRepetitionValue(e.target.value)}
+              >
+                <option value="0">Every Week</option>
+                <option value="1">Every 2 Weeks</option>
+                <option value="2">Every 3 Weeks</option>
+                <option value="3">Every 4 Weeks</option>
+                <option value="4">Every 5 Weeks</option>
+                
+              </select>
+            </div>
+            */}
+            </div>
+            
+            <div className="mt-4">
             <label>Everyday</label>
             <input
               type="checkbox"
               id="exampleCheckbox"
               name="exampleCheckbox"
-              value="1"
+              checked={dailyRepeat}
+              onChange={handleCheckboxChange}
             />
-
-            <div>
-              <label className="pr-2">Active on </label>
-              <select
-                id="wochentag"
-                name="wochentag"
-                value={selectedDay}
-                onChange={(e) => setSelectedDay(e.target.value)}
-              >
-                <option>please select</option>
-
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-                <option value="sunday">Sunday</option>
-              </select>
             </div>
+            
 
-            <p className="pt-8">Or</p>
-            <div className="flex">
+            <div className="flex mt-4">
               <input type="date" name="" id="" />
-
               <p>On Certain Date</p>
             </div>
-            <p className="text-red-500 mt-8">
-              This time is already occupied by HelloWorld (11:15-14:20)!
-            </p>
-
-            <button className="bg-blue-500 text-white py-1 px-7 rounded-full mt-2">
-              Edit HelloWorld
-            </button>
-            <button className="bg-blue-500 text-white py-1 px-7 rounded-full ml-4">
-              Show Timeplan
-            </button>
+            
 
             <div className="flex mt-8">
               <label>Select Colors</label>
