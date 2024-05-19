@@ -13,52 +13,50 @@ function AddTimeBlock() {
   const [selectedDay, setSelectedDay] = useState("");
   const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
-const handleStartTimeChange = (event) => {
-  setStartingTime(event.target.value);
-};
-
-const handleEndTimeChange = (event) => {
-  setEndingTime(event.target.value);
-};
-
-// Funktion zur manuellen Formatierung des Datums
-const formatDate = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${day}.${month}.${year}`;
-};
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-  const dayOfWeek = datum.getDay();
-  const wochentage = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
-  const newTimeBlock = {
-    startingTime: startingTime.toString(),
-    endingTime: endingTime.toString(),
-    startingDate: formatDate(datum), // Formatieren des Datums
-    repetitionDay: wochentage[dayOfWeek - 1],
-    weeklyRepetionValue: 2,
-    weekyRepeat: true,
-    dailyRepeat: false,
-    activeOnCertainDay: false,
+  const handleStartTimeChange = (event) => {
+    setStartingTime(event.target.value);
   };
-  setTimeBlocks([...timeBlocks, newTimeBlock]);
-  setStartingTime("");
-  setEndingTime("");
-  setSelectedDay("");
-  setDatum(new Date());
-};
 
-  
+  const handleEndTimeChange = (event) => {
+    setEndingTime(event.target.value);
+  };
+
+  // Funktion zur manuellen Formatierung des Datums
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}.${month}.${year}`;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const dayOfWeek = datum.getDay();
+    const wochentage = [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ];
+    const newTimeBlock = {
+      startingTime: startingTime.toString(),
+      endingTime: endingTime.toString(),
+      startingDate: formatDate(datum), // Formatieren des Datums
+      repetitionDay: wochentage[dayOfWeek - 1],
+      weeklyRepetionValue: 2,
+      weekyRepeat: true,
+      dailyRepeat: false,
+      activeOnCertainDay: false,
+    };
+    setTimeBlocks([...timeBlocks, newTimeBlock]);
+    setStartingTime("");
+    setEndingTime("");
+    setSelectedDay("");
+    setDatum(new Date());
+  };
 
   // Funktion zum Berechnen des Datums basierend auf dem ausgewählten Tag
   const calculateDateBasedOnSelectedDay = () => {
@@ -92,9 +90,7 @@ const handleSubmit = (event) => {
         return;
     }
 
-    
     today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
-    
 
     setDatum(today);
   };
@@ -102,8 +98,6 @@ const handleSubmit = (event) => {
   useEffect(() => {
     calculateDateBasedOnSelectedDay();
   }, [selectedDay]);
-
-
 
   return (
     <div className="px-16">
@@ -114,7 +108,7 @@ const handleSubmit = (event) => {
         Add a Timeblock
       </button>
       <Calender blocks={timeBlocks} />
-      
+
       {isOpen ? (
         <div className="w-[50%] p-8 bg-white border-gray-600 border-2 rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
           <form onSubmit={handleSubmit}>
@@ -154,11 +148,24 @@ const handleSubmit = (event) => {
                 </div>
               </div>
             </div>
-            <div className="flex">
-              <p>Everyday?</p>
-              <p className="pr-2">Active on every:</p>
-              <select id="wochentag" name="wochentag" value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
-              <option>please select</option>
+            <p className="text-red-500"></p>
+            <label>Everyday</label>
+            <input
+              type="checkbox"
+              id="exampleCheckbox"
+              name="exampleCheckbox"
+              value="1"
+            />
+
+            <div>
+              <label className="pr-2">Active on </label>
+              <select
+                id="wochentag"
+                name="wochentag"
+                value={selectedDay}
+                onChange={(e) => setSelectedDay(e.target.value)}
+              >
+                <option>please select</option>
 
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
@@ -169,6 +176,7 @@ const handleSubmit = (event) => {
                 <option value="sunday">Sunday</option>
               </select>
             </div>
+
             <p className="pt-8">Or</p>
             <div className="flex">
               <input type="date" name="" id="" />
@@ -186,7 +194,6 @@ const handleSubmit = (event) => {
               Show Timeplan
             </button>
 
-            
             <div className="flex mt-8">
               <label>Select Colors</label>
               <button>

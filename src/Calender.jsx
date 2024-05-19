@@ -40,7 +40,7 @@ function Calender({ blocks }) {
 
   var heute = new Date();
   var wochentagIndex = heute.getDay();
-  // Ein Array mit den Wochentagen als Strings
+  // Wochentage im kalender
   var wochentage = [
     "monday",
     "tuesday",
@@ -49,6 +49,15 @@ function Calender({ blocks }) {
     "friday",
     "saturday",
     "sunday",
+  ];
+  //wochentage zum vergleichen? hab noch nix besseres gefunden
+  var wochentage1 = [
+    "sunday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
   ];
 
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
@@ -104,7 +113,7 @@ function Calender({ blocks }) {
         return false;
       } else {
         // Monate sind gleich, Tage vergleichen
-        if (dayOfDate1 > dayOfDate2) {
+        if (dayOfDate1 >= dayOfDate2) {
           return true;
         } else {
           return false;
@@ -112,6 +121,8 @@ function Calender({ blocks }) {
       }
     }
   }
+
+  
   return (
     <div>
       <button
@@ -131,6 +142,7 @@ function Calender({ blocks }) {
       <div className="grid grid-cols-7">
         {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
+            {day}
             <div
               className="border-b border-r p-2 text-xl border-gray-600"
               key={dayIndex}
@@ -141,22 +153,19 @@ function Calender({ blocks }) {
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  <p>Date1: {timeBlock.startingDate}</p>
-                  <p>Date2: {dateInCalender(dayIndex)}</p>
+                  <p>{wochentage[wochentagIndex - 1]}</p>
                   {getBiggerDate(
                     timeBlock.startingDate,
                     dateInCalender(dayIndex)
                   )}
-                  {/*<p>{getDatepartsFromDate(dateInCalender(dayIndex))}</p> */}
-
-                  {/*<p>{getDatepartsFromDate(timeBlock.startingDate)}</p>*/}
+                  
                   {getBiggerDate(
                     dateInCalender(dayIndex),
                     timeBlock.startingDate
                   ) && day == timeBlock.repetitionDay ? (
                     <div
                       style={{
-                        backgroundColor: timeBlock.color,
+                        backgroundColor: "#ff9900",
                         height: `${calculateTime(
                           timeBlock.startingTime,
                           timeBlock.endingTime
@@ -188,7 +197,7 @@ function Calender({ blocks }) {
                       : "bg-gray-300 border-b border-gray-600"
                   }`}
                   style={
-                    day === wochentage[wochentagIndex - 1]
+                    day === wochentage1[wochentagIndex]
                       ? { filter: "brightness(80%)" }
                       : {}
                   }
