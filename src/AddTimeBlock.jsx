@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calender from "./Calender.jsx";
 
 function AddTimeBlock() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const changeOpenState = () => {
     setIsOpen(!isOpen);
   };
@@ -10,13 +10,13 @@ function AddTimeBlock() {
   const [startingTime, setStartingTime] = useState("");
   const [endingTime, setEndingTime] = useState("");
   const [timeBlocks, setTimeBlocks] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedDay, setSelectedDay] = useState("empty");
   const [datum, setDatum] = useState(new Date());
   const [dailyRepeat, setDailyRepeat] = useState(false);
 
-  //const [repetitionValue, setRepetitionValue] = useState("0");
   const handleCheckboxChange = () => {
     setDailyRepeat(!dailyRepeat);
+    setSelectedDay("empty");
   };
 
   const handleStartTimeChange = (event) => {
@@ -27,7 +27,6 @@ function AddTimeBlock() {
     setEndingTime(event.target.value);
   };
 
-  // Funktion zur manuellen Formatierung des Datums
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -37,38 +36,25 @@ function AddTimeBlock() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const dayOfWeek = datum.getDay();
-    const wochentage = [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ];
+    
     const newTimeBlock = {
       startingTime: startingTime.toString(),
       endingTime: endingTime.toString(),
-      startingDate: formatDate(datum), // Formatieren des Datums
-      repetitionDay: wochentage[dayOfWeek - 1],
-      //weeklyRepetitionValue: repetitionValue,
-      //weekyRepeat: true,
+      startingDate: formatDate(datum),
+      repetitionDay: selectedDay,
       dailyRepeat: dailyRepeat,
       activeOnCertainDay: "09.06.2024",
     };
     setTimeBlocks([...timeBlocks, newTimeBlock]);
     setStartingTime("");
     setEndingTime("");
-    setSelectedDay("");
-    setRepetitionValue("0");
+    setSelectedDay("empty");
     setDatum(new Date());
   };
 
-  // Funktion zum Berechnen des Datums basierend auf dem ausgewählten Tag
   const calculateDateBasedOnSelectedDay = () => {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 für Sonntag, 1 für Montag usw.
+    const dayOfWeek = today.getDay();
     let selectedDayIndex;
 
     switch (selectedDay.toLowerCase()) {
@@ -98,9 +84,10 @@ function AddTimeBlock() {
     }
 
     today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
-
     setDatum(today);
   };
+
+  
 
   useEffect(() => {
     calculateDateBasedOnSelectedDay();
@@ -157,7 +144,12 @@ function AddTimeBlock() {
             </div>
             <p className="text-red-500"></p>
 
-            <div className="flex">
+            {dailyRepeat ? (
+              <div className="text-gray-500 flex">
+                <p className="pr-2">Every </p>
+                <p>{selectedDay}</p>
+              </div>
+            ) : (
               <div>
                 <label className="pr-2">Every </label>
                 <select
@@ -166,8 +158,7 @@ function AddTimeBlock() {
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
                 >
-                  <option>please select</option>
-
+                  <option value="empty">please select</option>
                   <option value="monday">Monday</option>
                   <option value="tuesday">Tuesday</option>
                   <option value="wednesday">Wednesday</option>
@@ -177,41 +168,37 @@ function AddTimeBlock() {
                   <option value="sunday">Sunday</option>
                 </select>
               </div>
-              {/*
-            <div>
-              <select
-                id="repetition"
-                value={repetitionValue}
-                onChange={(e) => setRepetitionValue(e.target.value)}
-              >
-                <option value="0">Every Week</option>
-                <option value="1">Every 2 Weeks</option>
-                <option value="2">Every 3 Weeks</option>
-                <option value="3">Every 4 Weeks</option>
-                <option value="4">Every 5 Weeks</option>
-                
-              </select>
-            </div>
-            */}
-            </div>
-            
-            <div className="mt-4">
-            <label>Everyday</label>
-            <input
-              type="checkbox"
-              id="exampleCheckbox"
-              name="exampleCheckbox"
-              checked={dailyRepeat}
-              onChange={handleCheckboxChange}
-            />
-            </div>
-            
+            )}
+
+            {selectedDay == "empty" || dailyRepeat ? (
+              <div className="mt-4">
+                <label>Everyday</label>
+                <input
+                  type="checkbox"
+                  id="exampleCheckbox"
+                  name="exampleCheckbox"
+                  checked={dailyRepeat}
+                  onChange={handleCheckboxChange}
+                />
+              </div>
+            ) : (
+              <div className="mt-4 text-gray-500">
+                <label>Everyday</label>
+                <input
+                  type="checkbox"
+                  id="exampleCheckbox"
+                  name="exampleCheckbox"
+                  checked={dailyRepeat}
+                  onChange={handleCheckboxChange}
+                  onClick={handleCheckboxChange}
+                />
+              </div>
+            )}
 
             <div className="flex mt-4">
               <input type="date" name="" id="" />
               <p>On Certain Date</p>
             </div>
-            
 
             <div className="flex mt-8">
               <label>Select Colors</label>
@@ -221,7 +208,7 @@ function AddTimeBlock() {
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="bi bi-palette"
+                  className="bi bi-palette"
                   viewBox="0 0 16 16"
                 >
                   <path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
