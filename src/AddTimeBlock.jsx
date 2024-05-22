@@ -11,12 +11,11 @@ function AddTimeBlock() {
   const [endingTime, setEndingTime] = useState("");
   const [timeBlocks, setTimeBlocks] = useState([]);
   const [selectedDay, setSelectedDay] = useState("empty");
-  const [datum, setDatum] = useState(new Date());
   const [dailyRepeat, setDailyRepeat] = useState(false);
 
   const handleCheckboxChange = () => {
     setDailyRepeat(!dailyRepeat);
-    setSelectedDay("empty");
+    
   };
 
   const handleStartTimeChange = (event) => {
@@ -26,6 +25,8 @@ function AddTimeBlock() {
   const handleEndTimeChange = (event) => {
     setEndingTime(event.target.value);
   };
+  
+  const today = new Date();
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -40,7 +41,7 @@ function AddTimeBlock() {
     const newTimeBlock = {
       startingTime: startingTime.toString(),
       endingTime: endingTime.toString(),
-      startingDate: formatDate(datum),
+      startingDate: formatDate(today),
       repetitionDay: selectedDay,
       dailyRepeat: dailyRepeat,
       activeOnCertainDay: "09.06.2024",
@@ -49,49 +50,9 @@ function AddTimeBlock() {
     setStartingTime("");
     setEndingTime("");
     setSelectedDay("empty");
-    setDatum(new Date());
-  };
-
-  const calculateDateBasedOnSelectedDay = () => {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    let selectedDayIndex;
-
-    switch (selectedDay.toLowerCase()) {
-      case "monday":
-        selectedDayIndex = 1;
-        break;
-      case "tuesday":
-        selectedDayIndex = 2;
-        break;
-      case "wednesday":
-        selectedDayIndex = 3;
-        break;
-      case "thursday":
-        selectedDayIndex = 4;
-        break;
-      case "friday":
-        selectedDayIndex = 5;
-        break;
-      case "saturday":
-        selectedDayIndex = 6;
-        break;
-      case "sunday":
-        selectedDayIndex = 0;
-        break;
-      default:
-        return;
-    }
-
-    today.setDate(today.getDate() + selectedDayIndex - dayOfWeek);
-    setDatum(today);
   };
 
   
-
-  useEffect(() => {
-    calculateDateBasedOnSelectedDay();
-  }, [selectedDay]);
 
   return (
     <div className="px-16">
@@ -190,7 +151,6 @@ function AddTimeBlock() {
                   name="exampleCheckbox"
                   checked={dailyRepeat}
                   onChange={handleCheckboxChange}
-                  onClick={handleCheckboxChange}
                 />
               </div>
             )}

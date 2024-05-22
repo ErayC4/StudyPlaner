@@ -70,7 +70,7 @@ function Calender({ blocks }) {
     const targetDate = new Date(
       datum.getFullYear(),
       datum.getMonth(),
-      datum.getDate() + (dayIndex) - datum.getDay()
+      datum.getDate() + dayIndex - datum.getDay()
     );
 
     // Manuelle Formatierung des Datums
@@ -82,12 +82,12 @@ function Calender({ blocks }) {
   };
 
   const getToday = () => {
-    const today = new Date()
-    const day = String(today.getDate()).padStart(2,"0");
-    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
     return `${day}.${month}.${year}`;
-  }
+  };
 
   function getBiggerDate(date1, date2) {
     const date1Array = date1.split(".");
@@ -121,12 +121,9 @@ function Calender({ blocks }) {
       }
     }
   }
-  
-  
-  
+
   return (
     <div>
-      
       <button
         className="bg-yellow-400 py-2 px-8 rounded-full"
         onClick={handleBack}
@@ -153,8 +150,8 @@ function Calender({ blocks }) {
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  
-                  
+
+                  {/*verbuggt wegen getBiggerDate, warscheinlich was mit timeBlock.StartingDate */}
                   {getBiggerDate(
                     dateInCalender(dayIndex),
                     timeBlock.startingDate
@@ -197,8 +194,7 @@ function Calender({ blocks }) {
                       ? { filter: "brightness(80%)" }
                       : {}
                   }
-                >
-                </div>
+                ></div>
               ))}
             </div>
           </div>
