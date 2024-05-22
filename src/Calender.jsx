@@ -12,7 +12,7 @@ function Calender({ blocks }) {
     const startingMinutes = parseInt(startingTimeParts[1]);
     const timeLength =
       endingHours * 60 + endingMinutes - (startingHours * 60 + startingMinutes);
-    return timeLength;
+    return Math.abs(timeLength);
   }
 
   function calculateBaseline(blocks) {
@@ -38,8 +38,6 @@ function Calender({ blocks }) {
   // Erstelle ein neues Date-Objekt
   const [datum, setDatum] = useState(new Date()); // Aktuelles Datum als Standardwert
 
-  var heute = new Date();
-  var wochentagIndex = heute.getDay();
   // Wochentage im kalender
   var wochentage = [
     "sunday",
@@ -121,7 +119,6 @@ function Calender({ blocks }) {
       }
     }
   }
-
   return (
     <div>
       <button
@@ -150,32 +147,31 @@ function Calender({ blocks }) {
             <div className="absolute z-10">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-
                   {/*verbuggt wegen getBiggerDate, warscheinlich was mit timeBlock.StartingDate */}
                   {getBiggerDate(
                     dateInCalender(dayIndex),
                     timeBlock.startingDate
-                  ) && (day == timeBlock.repetitionDay || timeBlock.dailyRepeat) ? (
-                    <div
-                      style={{
-                        backgroundColor: "#ff9900",
-                        height: `${calculateTime(
-                          timeBlock.startingTime,
-                          timeBlock.endingTime
-                        )}px`,
-                        marginTop: `${calculateTime(
-                          baseline,
-                          timeBlock.startingTime
-                        )}px`,
-                      }}
-                      className="absolute mx-2 rounded-lg w-48"
-                    >
-                      <div>{timeBlock.startingTime}</div>
-                      <div>{timeBlock.date}</div>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                  ) &&
+                    (day == timeBlock.repetitionDay ||
+                      timeBlock.dailyRepeat) && (
+                      <div
+                        style={{
+                          backgroundColor: "#ff9900",
+                          height: `${calculateTime(
+                            timeBlock.startingTime,
+                            timeBlock.endingTime
+                          )}px`,
+                          marginTop: `${calculateTime(
+                            baseline,
+                            timeBlock.startingTime
+                          )}px`,
+                        }}
+                        className="absolute mx-2 rounded-lg w-48"
+                      >
+                        <div>{timeBlock.startingTime}</div>
+                        <div>{timeBlock.startingDate}</div>
+                      </div>
+                    )}
                 </div>
               ))}
             </div>

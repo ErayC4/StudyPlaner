@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Calender from "./Calender.jsx";
 
 function AddTimeBlock() {
@@ -25,7 +25,7 @@ function AddTimeBlock() {
   const handleEndTimeChange = (event) => {
     setEndingTime(event.target.value);
   };
-  
+
   const today = new Date();
 
   const formatDate = (date) => {
@@ -42,6 +42,7 @@ function AddTimeBlock() {
       startingTime: startingTime.toString(),
       endingTime: endingTime.toString(),
       startingDate: formatDate(today),
+      endingDate: formatDate(today),
       repetitionDay: selectedDay,
       dailyRepeat: dailyRepeat,
       activeOnCertainDay: "09.06.2024",
@@ -155,10 +156,7 @@ function AddTimeBlock() {
               </div>
             )}
 
-            <div className="flex mt-4">
-              <input type="date" name="" id="" />
-              <p>On Certain Date</p>
-            </div>
+            
 
             <div className="flex mt-8">
               <label>Select Colors</label>
