@@ -144,7 +144,7 @@ function Calender({ blocks }) {
               {day}
               <div>{dateInCalender(dayIndex)}</div>
             </div>
-            <div className="absolute z-10">
+            <div className="absolute z-10 ">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
                   {/*verbuggt wegen getBiggerDate, warscheinlich was mit timeBlock.StartingDate */}
@@ -168,8 +168,11 @@ function Calender({ blocks }) {
                         }}
                         className="absolute mx-2 rounded-lg w-48"
                       >
-                        <div>{timeBlock.startingTime}</div>
-                        <div>{timeBlock.startingDate}</div>
+                        <div className="pt-2 pl-4">
+                        <p className="text-xl">{timeBlock.name}</p>
+                        <p className="text-lg">{timeBlock.startingTime} - {timeBlock.endingTime}</p>
+                        </div>
+                        
                       </div>
                     )}
                 </div>

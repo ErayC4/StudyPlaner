@@ -12,6 +12,11 @@ function AddTimeBlock() {
   const [timeBlocks, setTimeBlocks] = useState([]);
   const [selectedDay, setSelectedDay] = useState("empty");
   const [dailyRepeat, setDailyRepeat] = useState(false);
+  const [timeblockName, setTimeblockName] = useState("");
+
+  const handleNameChange = (event) => {
+    setTimeblockName(event.target.value);
+  };
 
   const handleCheckboxChange = () => {
     setDailyRepeat(!dailyRepeat);
@@ -45,12 +50,14 @@ function AddTimeBlock() {
       endingDate: formatDate(today),
       repetitionDay: selectedDay,
       dailyRepeat: dailyRepeat,
-      activeOnCertainDay: "09.06.2024",
+      //activeOnCertainDay: "09.06.2024",
+      name: timeblockName,
     };
     setTimeBlocks([...timeBlocks, newTimeBlock]);
     setStartingTime("");
     setEndingTime("");
     setSelectedDay("empty");
+    setTimeblockName("");
   };
 
   
@@ -71,11 +78,12 @@ function AddTimeBlock() {
             <p className="text-4xl">Add a Time block</p>
             <p className="text-xl mt-16">Task Name:</p>
             <input
-              type="text"
-              name=""
-              id=""
-              className="w-full border-b border-black "
-            />
+  type="text"
+  value={timeblockName}
+  onChange={handleNameChange}
+  className="w-full border-b border-black"
+/>
+
             <div className="grid grid-cols-2 w-full mt-8">
               <div>
                 <p>From:</p>
