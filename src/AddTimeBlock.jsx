@@ -71,7 +71,6 @@ function AddTimeBlock() {
         Add a Timeblock
       </button>
       <Calender blocks={timeBlocks} />
-
       {isOpen ? (
         <div className="w-[50%] p-8 bg-white border-gray-600 border-2 rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
           <form onSubmit={handleSubmit}>

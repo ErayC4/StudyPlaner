@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Timeline from "./timeline.jsx";
 
 function Calender({ blocks }) {
   function calculateTime(startingTime, endingTime) {
@@ -16,8 +17,9 @@ function Calender({ blocks }) {
   }
 
   function calculateBaseline(blocks) {
+    //default bei 06:00 falls keine blöcke da sind
     if (!blocks || blocks.length === 0) {
-      return null;
+      return "06:00";
     }
     // Funktion, um die Minuten auf 00 zu setzen
     function roundDownToHour(timeString) {
@@ -48,8 +50,8 @@ function Calender({ blocks }) {
     "friday",
     "saturday",
   ];
-  //wochentage zum vergleichen? hab noch nix besseres gefunden
 
+  //halbe stunde * 48 = ein tag
   const stundenArray = Array.from({ length: 48 }, (_, index) => index);
 
   const handleBack = () => {
@@ -133,8 +135,11 @@ function Calender({ blocks }) {
       >
         forth
       </button>
-      <div className="grid grid-cols-7"></div>
-      <div className="grid grid-cols-7">
+      <div className="flex">
+        <div className="w-[5%] mt-[72px] border-r border-black">
+          <Timeline baseline={baseline} />
+        </div>
+        <div className="grid grid-cols-7 w-full">
         {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
             <div
@@ -144,10 +149,9 @@ function Calender({ blocks }) {
               {day}
               <div>{dateInCalender(dayIndex)}</div>
             </div>
-            <div className="absolute z-10 ">
+            <div className="absolute z-20 ">
               {blocks.map((timeBlock, index) => (
                 <div key={index}>
-                  {/*verbuggt wegen getBiggerDate, warscheinlich was mit timeBlock.StartingDate */}
                   {getBiggerDate(
                     dateInCalender(dayIndex),
                     timeBlock.startingDate
@@ -169,10 +173,11 @@ function Calender({ blocks }) {
                         className="absolute mx-2 rounded-lg w-48"
                       >
                         <div className="pt-2 pl-4">
-                        <p className="text-xl">{timeBlock.name}</p>
-                        <p className="text-lg">{timeBlock.startingTime} - {timeBlock.endingTime}</p>
+                          <p className="text-xl">{timeBlock.name}</p>
+                          <p className="text-lg">
+                            {timeBlock.startingTime} - {timeBlock.endingTime}
+                          </p>
                         </div>
-                        
                       </div>
                     )}
                 </div>
@@ -199,6 +204,9 @@ function Calender({ blocks }) {
           </div>
         ))}
       </div>
+      </div>
+
+      
     </div>
   );
 }
