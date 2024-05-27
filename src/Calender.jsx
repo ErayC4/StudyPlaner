@@ -135,15 +135,15 @@ function Calender({ blocks }) {
       >
         forth
       </button>
-      <div className="flex">
-        <div className="w-[5%] mt-[72px] border-r border-black">
+        
+        <div className="grid grid-cols-8 w-full">
+        <div className="mt-[65px]">
           <Timeline baseline={baseline} />
         </div>
-        <div className="grid grid-cols-7 w-full">
         {wochentage.map((day, dayIndex) => (
           <div key={dayIndex}>
             <div
-              className="border-b border-r p-2 text-xl border-gray-600"
+              className="border-b border-l p-2 text-xl border-gray-600"
               key={dayIndex}
             >
               {day}
@@ -188,7 +188,7 @@ function Calender({ blocks }) {
               {stundenArray.map((index) => (
                 <div
                   key={index}
-                  className={`w-full h-[30px] border-r border-gray-600 ${
+                  className={`w-full h-[30px] border-l border-gray-600 ${
                     index % 2 == 0
                       ? "bg-transparent"
                       : "bg-gray-300 border-b border-gray-600"
@@ -203,7 +203,6 @@ function Calender({ blocks }) {
             </div>
           </div>
         ))}
-      </div>
       </div>
 
       

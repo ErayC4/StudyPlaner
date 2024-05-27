@@ -18,18 +18,27 @@ function Timeline({ baseline }) {
   const zeit = Array.from({ length: 24 }, (_, index) => index);
 
   return (
-    <div className="text-end">
-      {zeit.map((index) => (
-        <div>
-          <p className="h-[60px]">
-            {calculateTime(baseline, index) >= 10 ? (
-              <p>{calculateTime(baseline, index)}:00</p>
-            ) : (
-              <p>0{calculateTime(baseline, index)}:00</p>
-            )}
-          </p>
-        </div>
-      ))}
+    <div>
+      <div className="text-end">
+        {zeit.map((index) => (
+          <div className="flex flex-row justify-end">
+            <div className="h-[60px] pt-14 pr-4">
+              {calculateTime(baseline, index) + 1>= 10 ? (
+                <p>{calculateTime(baseline, index) + 1}:00</p>
+              
+              ) : (
+                  <p>0{calculateTime(baseline, index) + 1}:00</p>
+              )}
+            </div>
+            <div className="flex flex-col justify-around h-[60px] items-end">
+              <span className="inline-block w-[20px] h-[1px] bg-black  "></span>
+              <span className="inline-block w-[8px] h-[1px] bg-black"></span>
+              <span className="inline-block w-[12px] h-[1px] bg-black"></span>
+              <span className="inline-block w-[8px] h-[1px] bg-black"></span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
