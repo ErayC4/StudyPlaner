@@ -89,7 +89,7 @@ function Calender({ blocks }) {
     return `${day}.${month}.${year}`;
   };
 
-  function getBiggerDate(date1, date2) {
+  function getBiggerDate(date1, date2, equals) {
     const date1Array = date1.split(".");
     const date2Array = date2.split(".");
 
@@ -113,9 +113,17 @@ function Calender({ blocks }) {
         return false;
       } else {
         // Monate sind gleich, Tage vergleichen
-        if (dayOfDate1 >= dayOfDate2) {
-          return true;
-        } else {
+        if(equals){
+          if (dayOfDate1 >= dayOfDate2) {
+            return true;
+          } 
+        }
+        if(!equals){
+          if (dayOfDate1 > dayOfDate2) {
+            return true;
+          } 
+        }
+        else {
           return false;
         }
       }
@@ -135,77 +143,84 @@ function Calender({ blocks }) {
       >
         forth
       </button>
-        
-        <div className="grid grid-cols-8 w-full">
-        <div className="mt-[65px]">
+      <div className="flex">
+        <div className="col-span-1 mt-[75px] border-t border-black pt-[7px] inline-block">
           <Timeline baseline={baseline} />
         </div>
-        {wochentage.map((day, dayIndex) => (
-          <div key={dayIndex}>
-            <div
-              className="border-b border-l p-2 text-xl border-gray-600"
-              key={dayIndex}
-            >
-              {day}
-              <div>{dateInCalender(dayIndex)}</div>
-            </div>
-            <div className="absolute z-20 ">
-              {blocks.map((timeBlock, index) => (
-                <div key={index}>
-                  {getBiggerDate(
-                    dateInCalender(dayIndex),
-                    timeBlock.startingDate
-                  ) &&
-                    (day == timeBlock.repetitionDay ||
-                      timeBlock.dailyRepeat) && (
-                      <div
-                        style={{
-                          backgroundColor: "#ff9900",
-                          height: `${calculateTime(
-                            timeBlock.startingTime,
-                            timeBlock.endingTime
-                          )}px`,
-                          marginTop: `${calculateTime(
-                            baseline,
-                            timeBlock.startingTime
-                          )}px`,
-                        }}
-                        className="absolute mx-2 rounded-lg w-48"
-                      >
-                        <div className="pt-2 pl-4">
-                          <p className="text-xl">{timeBlock.name}</p>
-                          <p className="text-lg">
-                            {timeBlock.startingTime} - {timeBlock.endingTime}
-                          </p>
+        <div className="grid grid-cols-7 w-full pt-1">
+          {wochentage.map((day, dayIndex) => (
+            <div key={dayIndex}>
+              <div className="text-xl text-center">
+                {day}
+                <div>{dateInCalender(dayIndex)}</div>
+              </div>
+              <div
+                className="border-b border-l h-4  border-gray-600"
+                key={dayIndex}
+              ></div>
+
+              <div className="absolute z-20 ">
+                {blocks.map((timeBlock, index) => (
+                  <div key={index}>
+                    {getBiggerDate(
+                      dateInCalender(dayIndex),
+                      timeBlock.startingDate, true
+                    ) &&
+                      (day == timeBlock.repetitionDay ||
+                        timeBlock.dailyRepeat) && (
+                        <div
+                          style={{
+                            backgroundColor: "#ff9900",
+                            height: `${calculateTime(
+                              timeBlock.startingTime,
+                              timeBlock.endingTime
+                            )}px`,
+                            marginTop: `${calculateTime(
+                              baseline,
+                              timeBlock.startingTime
+                            )}px`,
+                          }}
+                          className="absolute mx-2 rounded-lg w-48"
+                        >
+                          <div className="pt-2 pl-4">
+                            <p className="text-xl">{timeBlock.name}</p>
+                            <p className="text-lg">
+                              {timeBlock.startingTime} - {timeBlock.endingTime}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                </div>
-              ))}
-            </div>
+                      )}
+                  </div>
+                ))}
+              </div>
 
-            <div className="relative">
-              {stundenArray.map((index) => (
-                <div
-                  key={index}
-                  className={`w-full h-[30px] border-l border-gray-600 ${
-                    index % 2 == 0
-                      ? "bg-transparent"
-                      : "bg-gray-300 border-b border-gray-600"
-                  }`}
-                  style={
-                    dateInCalender(dayIndex) === getToday()
-                      ? { filter: "brightness(80%)" }
-                      : {}
+              <div className="relative">
+                {stundenArray.map((index) => {
+                  let style = {};
+
+                  if (getBiggerDate(getToday(), dateInCalender(dayIndex), false)) {
+                    style = { filter: "brightness(85%)" };
+                  } else if (getToday() === dateInCalender(dayIndex)) {
+                    style = { filter: "brightness(105%)" };
                   }
-                ></div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
 
-      
+                  return (
+                    <div
+                      key={index}
+                      className={`w-full h-[30px] border-l border-gray-600 ${
+                        index % 2 === 0
+                          ? "bg-gray-200"
+                          : "bg-gray-300 border-b border-gray-600"
+                      }`}
+                      style={style}
+                    ></div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
