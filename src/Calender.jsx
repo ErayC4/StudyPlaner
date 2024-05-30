@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Timeline from "./timeline.jsx";
-
+import "./index.css";
 function Calender({ blocks }) {
   function calculateTime(startingTime, endingTime) {
     const endingTimeParts = endingTime.split(":");
@@ -66,21 +66,49 @@ function Calender({ blocks }) {
     setDatum(neuesDatum); // Datum aktualisieren
   };
 
-  const dateInCalender = (dayIndex) => {
+  const dateInCalender = (dayIndex, type) => {
     const targetDate = new Date(
       datum.getFullYear(),
       datum.getMonth(),
       datum.getDate() + dayIndex - datum.getDay()
     );
-
-    // Manuelle Formatierung des Datums
     const year = targetDate.getFullYear();
     const month = String(targetDate.getMonth() + 1).padStart(2, "0"); // Monate sind 0-basiert, also +1
     const day = String(targetDate.getDate()).padStart(2, "0");
 
-    return `${day}.${month}.${year}`;
-  };
+    // Wochentagsnamen
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayOfWeek = daysOfWeek[targetDate.getDay()];
 
+    const monthName = [
+      "",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+    ];
+
+    // Suffix für den Tag-Zahl
+    const getOrdinalSuffix = (n) => {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return s[(v - 20) % 10] || s[v] || s[0];
+    };
+
+    const dayWithSuffix = day + getOrdinalSuffix(day);
+    if (type === "dayOfWeekAndDay") {
+      return `${dayOfWeek} ${dayWithSuffix}`;
+    } else if (type === "month") {
+      return `${monthName[parseInt(month)]}`;
+    } else {
+      return `${day}.${month}.${year}`;
+    }
+  };
   const getToday = () => {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
@@ -113,17 +141,16 @@ function Calender({ blocks }) {
         return false;
       } else {
         // Monate sind gleich, Tage vergleichen
-        if(equals){
+        if (equals) {
           if (dayOfDate1 >= dayOfDate2) {
             return true;
-          } 
+          }
         }
-        if(!equals){
+        if (!equals) {
           if (dayOfDate1 > dayOfDate2) {
             return true;
-          } 
-        }
-        else {
+          }
+        } else {
           return false;
         }
       }
@@ -131,40 +158,60 @@ function Calender({ blocks }) {
   }
   return (
     <div>
-      <button
-        className="bg-yellow-400 py-2 px-8 rounded-full"
-        onClick={handleBack}
-      >
-        back
-      </button>
-      <button
-        className="ml-2 mt-4 bg-yellow-400 py-2 px-8 rounded-full"
-        onClick={handleForth}
-      >
-        forth
-      </button>
+      <div>
+        <button className="h-8 w-8" onClick={handleBack}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            class="bi bi-chevron-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+            />
+          </svg>
+        </button>
+        <button className="h-8 w-8" onClick={handleForth}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            class="bi bi-chevron-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        </button>
+      </div>
       <div className="flex">
-        <div className="col-span-1 mt-[75px] border-t border-black pt-[7px] inline-block">
+        <div className="flex border-t mt-[92px] border-black pt-[7px]">
           <Timeline baseline={baseline} />
         </div>
+
         <div className="grid grid-cols-7 w-full pt-1">
           {wochentage.map((day, dayIndex) => (
             <div key={dayIndex}>
-              <div className="text-xl text-center">
-                {day}
-                <div>{dateInCalender(dayIndex)}</div>
-              </div>
               <div
-                className="border-b border-l h-4  border-gray-600"
-                key={dayIndex}
-              ></div>
+                className={`text-xl text-center border-b border-black rounded-t-lg py-4 ${
+                  getToday() === dateInCalender(dayIndex)
+                    ? "bg-gradient-to-b from-[#FBD21D] to-white"
+                    : ""
+                }`}
+              >
+                <div>{dateInCalender(dayIndex, "month")}</div>
+                <div>{dateInCalender(dayIndex, "dayOfWeekAndDay")}</div>
+              </div>
 
               <div className="absolute z-20 ">
                 {blocks.map((timeBlock, index) => (
                   <div key={index}>
                     {getBiggerDate(
                       dateInCalender(dayIndex),
-                      timeBlock.startingDate, true
+                      timeBlock.startingDate,
+                      true
                     ) &&
                       (day == timeBlock.repetitionDay ||
                         timeBlock.dailyRepeat) && (
@@ -196,24 +243,33 @@ function Calender({ blocks }) {
 
               <div className="relative">
                 {stundenArray.map((index) => {
-                  let style = {};
-
-                  if (getBiggerDate(getToday(), dateInCalender(dayIndex), false)) {
-                    style = { filter: "brightness(85%)" };
-                  } else if (getToday() === dateInCalender(dayIndex)) {
-                    style = { filter: "brightness(105%)" };
-                  }
+                  
 
                   return (
                     <div
                       key={index}
-                      className={`w-full h-[30px] border-l border-gray-600 ${
-                        index % 2 === 0
-                          ? "bg-gray-200"
-                          : "bg-gray-300 border-b border-gray-600"
-                      }`}
-                      style={style}
-                    ></div>
+                      
+                    >
+                      {getBiggerDate(
+                        getToday(),
+                        dateInCalender(dayIndex),
+                        false
+                      ) ? (
+                        <div className={`hintergrund h-[30px] w-full border-l border-gray-600 ${
+                          index % 2 === 0
+                            ? "white"
+                            : "bg-gray-200 border-b border-gray-600"
+                        }`}></div>
+                      ) : (
+                        <div
+                          className={`w-full h-[30px] border-l border-gray-600 ${
+                            index % 2 === 0
+                              ? "white"
+                              : "bg-gray-200 border-b border-gray-600"
+                          }`}
+                        ></div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
