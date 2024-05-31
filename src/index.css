@@ -4,5 +4,7 @@
 
 .hintergrund {
     background-image: repeating-linear-gradient(45deg, white, white 10px, #dbdbdb 10px, #dbdbdb 20px);
+    background-attachment: fixed;
+    background-position: 0 0; /* Hier kannst du die Position entsprechend anpassen */
 
 }

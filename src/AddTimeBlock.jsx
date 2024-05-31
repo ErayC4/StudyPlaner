@@ -20,7 +20,6 @@ function AddTimeBlock() {
 
   const handleCheckboxChange = () => {
     setDailyRepeat(!dailyRepeat);
-    
   };
 
   const handleStartTimeChange = (event) => {
@@ -42,7 +41,7 @@ function AddTimeBlock() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     const newTimeBlock = {
       startingTime: startingTime.toString(),
       endingTime: endingTime.toString(),
@@ -60,16 +59,50 @@ function AddTimeBlock() {
     setTimeblockName("");
   };
 
-  
-
   return (
-    <div className="px-16">
+    <div className="px-32">
       <button
         onClick={changeOpenState}
-        className="bg-blue-500 text-white py-2 px-16 rounded-full"
+        className="bg-gradient-to-r from-[#FBD21D] to-yellow-300 text-black py-2 px-4 rounded-xl"
       >
-        Add a Timeblock
+        <div className="flex items-center space-x-2">
+          {" "}
+          {/* Added space-x-2 for spacing between icon and text */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            className="bi bi-plus"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+            />
+          </svg>
+          <p className="text-xl">Timeblock</p>
+        </div>
       </button>
+
+      <button className="bg-gradient-to-r from-[#49fb1d] to-green-300 text-black py-2 px-4 rounded-xl ml-4">
+        <div className="flex items-center justify-center space-x-2">
+          {" "}
+          {/* Added space-x-2 for spacing between icon and text */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            className="bi bi-pencil"
+            viewBox="0 0 16 16"
+          >
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+          </svg>
+          <p className="text-xl">Edit</p>
+        </div>
+      </button>
+
       <Calender blocks={timeBlocks} />
       {isOpen ? (
         <div className="w-[50%] p-8 bg-white border-gray-600 border-2 rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
@@ -77,11 +110,11 @@ function AddTimeBlock() {
             <p className="text-4xl">Add a Time block</p>
             <p className="text-xl mt-16">Task Name:</p>
             <input
-  type="text"
-  value={timeblockName}
-  onChange={handleNameChange}
-  className="w-full border-b border-black"
-/>
+              type="text"
+              value={timeblockName}
+              onChange={handleNameChange}
+              className="w-full border-b border-black"
+            />
 
             <div className="grid grid-cols-2 w-full mt-8">
               <div>
@@ -162,8 +195,6 @@ function AddTimeBlock() {
                 />
               </div>
             )}
-
-            
 
             <div className="flex mt-8">
               <label>Select Colors</label>

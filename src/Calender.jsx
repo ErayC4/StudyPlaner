@@ -91,6 +91,9 @@ function Calender({ blocks }) {
       "July",
       "August",
       "September",
+      "Oktober",
+      "November",
+      "December",
     ];
 
     // Suffix für den Tag-Zahl
@@ -156,48 +159,50 @@ function Calender({ blocks }) {
       }
     }
   }
+  
   return (
     <div>
-      <div>
-        <button className="h-8 w-8" onClick={handleBack}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            class="bi bi-chevron-left"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-            />
-          </svg>
-        </button>
-        <button className="h-8 w-8" onClick={handleForth}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            class="bi bi-chevron-right"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-            />
-          </svg>
-        </button>
-      </div>
       <div className="flex">
-        <div className="flex border-t mt-[92px] border-black pt-[7px]">
-          <Timeline baseline={baseline} />
+        <div className="flex flex-col mt-[36px]">
+          <div className="bg-gray-300 flex justify-between py-2 px-2 rounded-xl w-full mb-[16px]">
+            <button className="h-6 w-6" onClick={handleBack}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                class="bi bi-chevron-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                />
+              </svg>
+            </button>
+            <button className="h-6 w-6" onClick={handleForth}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                class="bi bi-chevron-right"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className=" border-t pt-[7px] border-black">          <Timeline baseline={baseline} />
+</div>
         </div>
 
         <div className="grid grid-cols-7 w-full pt-1">
           {wochentage.map((day, dayIndex) => (
             <div key={dayIndex}>
               <div
-                className={`text-xl text-center border-b border-black rounded-t-lg py-4 ${
+                className={`text-xl text-center border-black border-b rounded-t-xl py-4 ${
                   getToday() === dateInCalender(dayIndex)
-                    ? "bg-gradient-to-b from-[#FBD21D] to-white"
+                    ? "bg-gradient-to-b from-yellow-300 to-yellow-100"
                     : ""
                 }`}
               >
@@ -227,7 +232,7 @@ function Calender({ blocks }) {
                               timeBlock.startingTime
                             )}px`,
                           }}
-                          className="absolute mx-2 rounded-lg w-48"
+                          className={`absolute mx-2 rounded-lg w-48`}
                         >
                           <div className="pt-2 pl-4">
                             <p className="text-xl">{timeBlock.name}</p>
@@ -243,26 +248,23 @@ function Calender({ blocks }) {
 
               <div className="relative">
                 {stundenArray.map((index) => {
-                  
-
                   return (
-                    <div
-                      key={index}
-                      
-                    >
+                    <div key={index}>
                       {getBiggerDate(
                         getToday(),
                         dateInCalender(dayIndex),
                         false
                       ) ? (
-                        <div className={`hintergrund h-[30px] w-full border-l border-gray-600 ${
-                          index % 2 === 0
-                            ? "white"
-                            : "bg-gray-200 border-b border-gray-600"
-                        }`}></div>
+                        <div
+                          className={` h-[30px] hintergrund w-full border-l border-gray-600 ${
+                            index % 2 === 0
+                              ? "white"
+                              : "bg-gray-200 border-b border-gray-600"
+                          }`}
+                        ></div>
                       ) : (
                         <div
-                          className={`w-full h-[30px] border-l border-gray-600 ${
+                          className={`w-full  h-[30px] border-l border-gray-600 ${
                             index % 2 === 0
                               ? "white"
                               : "bg-gray-200 border-b border-gray-600"
